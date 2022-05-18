@@ -74,29 +74,28 @@
 \RequirePackage{unicode-math}
 % Needed to use icons from font-awesome
 \RequirePackage{fontawesome5}
-\RequirePackage{roboto}
 \RequirePackage[default,opentype]{sourcesanspro}
 % Needed for the photo ID
 \RequirePackage[skins]{tcolorbox}
 % Needed to deal a paragraphs
 \RequirePackage{parskip}
 % Needed to deal hyperlink
-\RequirePackage[hidelinks,unicode,pdfpagelabels=false]{hyperref}
+\RequirePackage[hidelinks,unicode]{hyperref}
 \hypersetup{%
   pdftitle={},
   pdfauthor={},
   pdfsubject={},
   pdfkeywords={}
 }
-% Solves issues Warning: File `cv.out' has changed
-\RequirePackage{bookmark}
+
 
 %-------------------------------------------------------------------------------
 %                Configuration for directory locations
 %-------------------------------------------------------------------------------
-% Configure an optional directory location for fonts(default: 'fonts/')
-% Not required anymore but left in place for backward compatability.
+% Configure a directory location for fonts(default: 'fonts/')
 \newcommand*{\fontdir}[1][fonts/]{\def\@fontdir{#1}}
+\fontdir
+
 
 %-------------------------------------------------------------------------------
 %                Configuration for layout
@@ -161,8 +160,23 @@
 %-------------------------------------------------------------------------------
 %                Configuration for fonts
 %-------------------------------------------------------------------------------
-\newcommand*{\headerfont}{\roboto}
-\newcommand*{\headerfontlight}{\robotolight}
+% Set font for header (default is Roboto)
+\newfontfamily\headerfont[
+  Path=\@fontdir,
+  UprightFont=*-Regular,
+  ItalicFont=*-Italic,
+  BoldFont=*-Bold,
+  BoldItalicFont=*-BoldItalic,
+]{Roboto}
+
+\newfontfamily\headerfontlight[
+  Path=\@fontdir,
+  UprightFont=*-Thin,
+  ItalicFont=*-ThinItalic,
+  BoldFont=*-Medium,
+  BoldItalicFont=*-MediumItalic,
+]{Roboto}
+
 \newcommand*{\footerfont}{\sourcesanspro}
 \newcommand*{\bodyfont}{\sourcesanspro}
 \newcommand*{\bodyfontlight}{\sourcesansprolight}
@@ -777,4 +791,153 @@
       \\\\\\
       \letterenclosurestyle{\@letterenclname: \@letterenclosure} \\
     }
+}
+
+%-------------------------------------------------------------------------------
+%                Bibliography
+%-------------------------------------------------------------------------------
+%\RequirePackage[style=verbose, maxnames=99, sorting=ydnt]{biblatex}
+\RequirePackage[ % BibLaTeX
+	sorting=ydnt, % Sorts entries by year (descending order), name, title
+	style=verbose,
+	doi=false,
+	isbn=true,
+	url=false,
+	eprint=false,
+	backref = false, % include back references in bibliography
+	maxcitenames=3, % affects only the citations in the document body
+	maxbibnames=99, % affects only the bibliography, pass 99 to print all
+	hyperref=true,
+	block=none,
+	backend=biber % {Options: bibtex, biber}
+	]{biblatex}
+
+% Avoid splitting entries across page break (only for 3 or fewer lines)
+% Tip: http://tex.stackexchange.com/a/51261
+\AtBeginEnvironment{thebibliography}{%
+   \clubpenalty10000
+   \@clubpenalty \clubpenalty
+   \widowpenalty10000
+   \interlinepenalty5000}
+
+% Customized format, based on the Fancy CV template created by Adrien Friggeri
+% See https://github.com/ashee/cv (MIT license)
+\DeclareFieldFormat[article]{title}{#1\par}
+\DeclareFieldFormat[inproceedings]{title}{#1\par}
+\DeclareFieldFormat[misc]{title}{#1\par}
+\DeclareFieldFormat[report]{title}{#1\par}
+\DeclareFieldFormat[incollection]{title}{#1\par}
+
+\DeclareBibliographyDriver{article}{%
+  \fontsize{9pt}{1em}\bodyfont%
+  \printfield{title}%
+  \newblock%
+  \printnames{author}%
+  \par%
+  \newblock%
+  {%
+    \fontsize{8pt}{1em}\bodyfontlight\color{graytext}%
+    \usebibmacro{journal+issuetitle}%
+    \setunit{\space}%
+    \printfield{pages}%
+    \newunit%
+    \printlist{publisher}%
+    \setunit*{\addcomma\space}%
+    \printfield{year}%
+    \newunit%
+  }
+  \par\vspace{0.3\baselineskip}
+}
+
+\DeclareBibliographyDriver{inproceedings}{%
+  \fontsize{9pt}{1em}\bodyfont%
+  \printfield{title}%
+  \newblock%
+  \printnames{author}%
+  \par%
+  \newblock%
+  {%
+    \fontsize{8pt}{1em}\bodyfontlight\color{graytext}%
+    \printfield{booktitle}%
+    \setunit{\addcomma\space}%
+    \printfield{year}%
+    \setunit{\addcomma\space}%
+    \printlist{location}%
+    \newunit%
+  }
+  \par\vspace{0.3\baselineskip}
+}
+
+\DeclareBibliographyDriver{incollection}{%
+  \fontsize{9pt}{1em}\bodyfont%
+  \printfield{title}%
+  \newblock%
+  \printnames{author}%
+  \par%
+  \newblock%
+  {%
+    \fontsize{8pt}{1em}\bodyfontlight\color{graytext}%
+    \printfield{booktitle}%
+    \setunit{\addcomma\space}%
+    \printfield{year}%
+    \setunit{\addcomma\space}%
+    \printlist{location}%
+    \newunit%
+  }
+  \par\vspace{0.3\baselineskip}
+}
+
+\DeclareBibliographyDriver{misc}{%
+  \fontsize{9pt}{1em}\bodyfont%
+  \printfield{title}%
+  \newblock%
+  \printnames{author}%
+  \par%
+  \newblock%
+  {%
+    \fontsize{8pt}{1em}\bodyfontlight\color{graytext}%
+    \printfield{booktitle}%
+    \setunit*{\addcomma\space}%
+    \printfield{note}%
+    \setunit*{\addcomma\space}%
+    \printfield{year}%
+    \setunit{\addcomma\space}%
+    \printlist{location}%
+    \newunit%
+  }
+  \par\vspace{0.3\baselineskip}
+}
+
+\DeclareBibliographyDriver{report}{%
+  \fontsize{9pt}{1em}\bodyfont%
+  \printfield{title}%
+  \newblock%
+  \printnames{author}%
+  \par%
+  \newblock%
+  {%
+    \fontsize{8pt}{1em}\bodyfontlight\color{graytext}%
+    \printfield{type}%
+    \setunit{\space}%
+    \printfield{number}%
+    \setunit{\addcomma\space}%
+    \printfield{year}%
+    \newunit%
+  }
+  \par\vspace{0.3\baselineskip}
+}
+
+% New syntax for flexible backend (BibLaTeX > v3.3)
+\DeclareNameFormat{author}{%
+  \fontsize{9pt}{1em}\bodyfont%
+  \renewcommand*{\multinamedelim}{\addcomma\addspace}%
+  \nameparts{#1}%
+  \ifthenelse{\value{listcount}=1}
+    {\ifblank{\namepartgiven}{}{\namepartgiven\space}%
+    \namepartfamily}%
+    {\ifblank{\namepartgiven}{}{\namepartgiven\space}%
+    \namepartfamily}%
+  \ifthenelse{\value{listcount}<\value{liststop}}
+  {\addcomma\space}
+  {}
 }
