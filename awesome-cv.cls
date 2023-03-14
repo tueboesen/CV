@@ -800,9 +800,9 @@
 \RequirePackage[ % BibLaTeX
 	sorting=ydnt, % Sorts entries by year (descending order), name, title
 	style=verbose,
-	doi=false,
+	doi=true,
 	isbn=true,
-	url=false,
+	url=true,
 	eprint=false,
 	backref = false, % include back references in bibliography
 	maxcitenames=3, % affects only the citations in the document body
@@ -848,6 +848,7 @@
   }
   \par\vspace{0.3\baselineskip}
 }
+
 
 \DeclareBibliographyDriver{inproceedings}{%
   \fontsize{9pt}{1em}\bodyfont%

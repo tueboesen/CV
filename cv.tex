@@ -19,34 +19,56 @@
 %-------------------------------------------------------------------------------
 % A4 paper size by default, use 'letterpaper' for US letter
 \documentclass[11pt, a4paper]{awesome-cv}
+%\usepackage[backend=biber,url=true]{biblatex}
 \definecolor{darkblue}{rgb}{0.0,0.0,0.3}
 \hypersetup{colorlinks,linkcolor=darkblue,urlcolor=darkblue}
 % Configure page margins with geometry
 \geometry{left=1.4cm, top=.8cm, right=1.4cm, bottom=1.8cm, footskip=.5cm}
 \fontdir[fonts/]
 
-\newbibmacro{string+doiurl}[1]{%
-  \iffieldundef{doi}
-    {\iffieldundef{url}
-       {#1}
-       {\href{\thefield{url}}{#1}}}
-    {\href{https://doi.org/\thefield{doi}}{#1}}}
-
-\makeatletter
-\def\blx@driver#1{%
-  \ifcsdef{blx@bbx@#1}
-    {\usebibmacro{string+doiurl}{\csuse{blx@bbx@#1}}}
-    {\ifcsdef{blx@bbx@*}
-       {\blx@warning{%
-          No driver for entry type '#1'.\MessageBreak
-          Using fallback driver}%
-        \usebibmacro{string+doiurl}{\csuse{blx@bbx@*}}}
-       {\blx@error
-          {No driver found}
-          {I can't find a driver for the entry type
-           '\abx@field@entrytype'\MessageBreak
-           and there is no fallback driver either}}}}
-\makeatother
+%
+%\newcommand{\doiorurl}{%
+%  \iffieldundef{doi}
+%    {\iffieldundef{url}
+%       {}
+%       {\strfield{url}}}
+%    {http://dx.doi.org/\strfield{doi}}%
+%}
+%
+%\newcommand{\myhref}[1]{%
+% \ifboolexpr{%
+%   test {\ifhyperref}
+%   and
+%   not test {\iftoggle{bbx:url}}
+%   and
+%   not test {\iftoggle{bbx:doi}}
+%  }
+%  {\href{\doiorurl}{#1}}
+%  {#1}%
+%}
+%
+%\newbibmacro{string+doiurl}[1]{%
+%  \iffieldundef{doi}
+%    {\iffieldundef{url}
+%       {#1}
+%       {\href{\thefield{url}}{#1}}}
+%    {\href{https://doi.org/\thefield{doi}}{#1}}}
+%
+%\makeatletter
+%\def\blx@driver#1{%
+%  \ifcsdef{blx@bbx@#1}
+%    {\usebibmacro{string+doiurl}{\csuse{blx@bbx@#1}}}
+%    {\ifcsdef{blx@bbx@*}
+%       {\blx@warning{%
+%          No driver for entry type '#1'.\MessageBreak
+%          Using fallback driver}%
+%        \usebibmacro{string+doiurl}{\csuse{blx@bbx@*}}}
+%       {\blx@error
+%          {No driver found}
+%          {I can't find a driver for the entry type
+%           '\abx@field@entrytype'\MessageBreak
+%           and there is no fallback driver either}}}}
+%\makeatother
 
 
 
